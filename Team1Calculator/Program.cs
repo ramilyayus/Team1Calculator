@@ -7,15 +7,37 @@ var quantity = Convert.ToInt32(Console.ReadLine());
 Console.WriteLine($"Введите штат:");
 var state = Console.ReadLine();
 
+var saleTrashhold = 1000;
+var salePersentage = 0.03;
+
 var allStates = StatesRepository.GetAllStates();
 var stateEntity = allStates.Single(x => x.Code == state);
 
 var calculator = new Calculator();
 var result = calculator.Calculate(new Product(price, quantity), stateEntity);
-Console.WriteLine($"Итоговая стоимость: {result}");
+
+var saleCalculator = new SaleCalculator();
+if (result >= saleTrashhold)
+{
+    var resultWithSale = saleCalculator.Calculate(sum: result, sale: salePersentage);
+    Console.WriteLine($"Итоговая стоимость: {resultWithSale}");
+}
+else
+{
+    Console.WriteLine($"Итоговая стоимость: {result}");
+}
 
 public record Product(double Price, int Quantity);
 public record State(string Code, double Tax);
+
+public class SaleCalculator
+{
+    public double Calculate(double sum, double sale)
+    {
+        return sum * (1 - sale);
+    }
+}
+
 public class Calculator
 {
     public double Calculate(Product product, State state)
