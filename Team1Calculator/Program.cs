@@ -2,7 +2,8 @@
 
 Console.WriteLine($"Введите цену:");
 var price = Convert.ToDouble(Console.ReadLine());
-var quantity = 1;
+Console.WriteLine($"Введите количество товара:");
+var quantity = Convert.ToInt32(Console.ReadLine());
 
 var calculator = new Calculator();
 var result = calculator.Calculate(new Product(price, quantity));
